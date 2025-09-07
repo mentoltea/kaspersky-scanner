@@ -35,6 +35,7 @@ typedef enum {
     LEVEL_INFO,
     LEVEL_WARNING,
     LEVEL_ERROR,
+    LEVEL_RESULT,
 
     LEVEL_COUNT
 } LogLevel;
@@ -51,6 +52,7 @@ class LogStream {
     LogStream& operator<<(const std::string &s);
     LogStream& operator<<(const char* s);
     LogStream& operator<<(const int s);
+    LogStream& operator<<(const int64_t s);
     LogStream& operator<<(const long s);
     LogStream& operator<<(const size_t s);
     LogStream& operator<<(const float s);

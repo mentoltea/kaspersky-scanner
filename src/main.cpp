@@ -54,6 +54,8 @@ bool parse_args(int argc, char** argv) {
                 min_loglevel = LEVEL_WARNING;
             } else if (elem == "ERROR") {
                 min_loglevel = LEVEL_ERROR;
+            } else if (elem == "RESULT") {
+                min_loglevel = LEVEL_RESULT;
             } else {
                 std::cout << "Cannot identify log level " << elem << std::endl;
                 std::cout << "Available levels:" << std::endl;
@@ -141,15 +143,19 @@ int main(int argc, char** argv) {
     }
     
     Logger << std::endl;
-    Logger(LEVEL_INFO) << "\tTotal scanned: " << stat.total_count << std::endl;
-    Logger(LEVEL_INFO) << "\tBytes processed: " << stat.bytes_processed << std::endl;
-    Logger(LEVEL_INFO) << "\tEmpty files: " << stat.empty_files << std::endl;
-    Logger(LEVEL_INFO) << "\tSkipped directories: " << stat.skipped_directories << std::endl;
-    Logger(LEVEL_INFO) << "\tSkipped files: " << stat.skipped_files << std::endl;
+    Logger(LEVEL_RESULT) << "Total scanned: " << stat.total_count << std::endl;
+    Logger(LEVEL_RESULT) << "Time elapsed: " 
+        << chrono::duration_cast<chrono::milliseconds>(stat.search_end-stat.search_start).count() 
+        << " ms"
+        << std::endl;
+    Logger(LEVEL_RESULT) << "Bytes processed: " << stat.bytes_processed << std::endl;
+    Logger(LEVEL_RESULT) << "Empty files: " << stat.empty_files << std::endl;
+    Logger(LEVEL_RESULT) << "Skipped directories: " << stat.skipped_directories << std::endl;
+    Logger(LEVEL_RESULT) << "Skipped files: " << stat.skipped_files << std::endl;
     for (auto &s: stat.unchecked) {
         Logger << "\t\t" << s << std::endl;
     }
-    Logger(LEVEL_INFO) << "\tPotential threats: " << stat.threats.size() << std::endl;
+    Logger(LEVEL_RESULT) << "Potential threats: " << stat.threats.size() << std::endl;
     for (auto &threat: stat.threats) {
         Logger << "\t\t" << threat.filepath << " : " << threat.description.name << std::endl;
     }

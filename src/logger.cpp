@@ -6,43 +6,49 @@ LogStream::LogStream(std::ostream &os): stream(os) {}
 
 LogStream& LogStream::operator<< (const std::string &s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const char* s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const int s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
+    return *this;
+}
+
+LogStream& LogStream::operator<<(const int64_t s) {
+    const std::lock_guard<std::mutex> lock(stream_mutex);
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const long s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const size_t s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const float s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
 LogStream& LogStream::operator<<(const double s) {
     const std::lock_guard<std::mutex> lock(stream_mutex);
-    stream.get() << s << std::flush;
+    stream.get() << s << std::flush_emit;
     return *this;
 }
 
@@ -61,6 +67,7 @@ std::string LogStream::LevelToString(LogLevel level) {
     case LEVEL_DIR: return "DIR";
     case LEVEL_INFO: return "INFO";
     case LEVEL_WARNING: return "WARNING";
+    case LEVEL_RESULT: return "RESULT";
     case LEVEL_ERROR: return "ERROR";
     
     default: {
@@ -75,7 +82,7 @@ LogStream& LogStream::level(LogLevel level) {
         std::string levelstr = LevelToString(level);
 
         const std::lock_guard<std::mutex> lock(stream_mutex);
-        stream.get() << "[" << levelstr << "] " << std::flush;
+        stream.get() << "[" << levelstr << "] " << std::flush_emit;
     }
     return *this;
 }
@@ -85,7 +92,7 @@ LogStream& LogStream::operator()(LogLevel level) {
         std::string levelstr = LevelToString(level);
 
         const std::lock_guard<std::mutex> lock(stream_mutex);
-        stream.get() << "[" << levelstr << "] " << std::flush;
+        stream.get() << "[" << levelstr << "] " << std::flush_emit;
     }
     return *this;
 }
@@ -95,7 +102,7 @@ LogStream& LogStream::operator()(LogLevel level, const std::string &s) {
         std::string levelstr = LevelToString(level);
 
         const std::lock_guard<std::mutex> lock(stream_mutex);
-        stream.get() << "[" << levelstr << "] " << s << std::flush;
+        stream.get() << "[" << levelstr << "] " << s << std::flush_emit;
     }
     return *this;
 }

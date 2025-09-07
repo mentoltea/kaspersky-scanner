@@ -7,11 +7,13 @@
 
 #include <filesystem>
 namespace fs = std::filesystem;
+namespace chrono = std::chrono;
 
 #include <thread>
 #include <list>
 #include <tuple>
 #include <format>
+#include <chrono>
 
 #ifndef PREFIX
 #define PREFIX
@@ -35,6 +37,8 @@ struct Threat {
 struct SearchStatistics {
     size_t total_count, skipped_files, empty_files, skipped_directories;
     size_t bytes_processed;
+    chrono::steady_clock::time_point search_start;
+    chrono::steady_clock::time_point search_end;
     std::vector<Threat> threats;
     std::vector<std::string> unchecked;
 };

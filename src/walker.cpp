@@ -283,20 +283,23 @@ SearchStatistics search_in_directory(fs::path dir, size_t max_threads, const Thr
     
     SearchStatistics stat = {.total_count=0, .skipped_files=0, .skipped_directories=0, .bytes_processed=0};
     
+    
     Logger(LEVEL_INFO) << "Search started" << std::endl;
+    stat.search_start = chrono::steady_clock::now();
     
     try {
         recursive_search(threads, thread_free, results, stat.skipped_directories, dir, max_threads, tb, max_chunk_size);
     } catch (std::exception &e) {
         Logger(LEVEL_ERROR, std::format("{0}\n", std::string(e.what())) );
     }
-
+    
     for (std::jthread &t: threads) {
         t.join();
     }
-
+    
+    stat.search_end = chrono::steady_clock::now();
     Logger(LEVEL_INFO) << "Search completed" << std::endl;
-
+    
     for (auto &list: results) {
         for (auto &result: list) {
             stat.total_count++;
@@ -319,6 +322,6 @@ SearchStatistics search_in_directory(fs::path dir, size_t max_threads, const Thr
             }
         }
     }
-
+    
     return stat;
 }

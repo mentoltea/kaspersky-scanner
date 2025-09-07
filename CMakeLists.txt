@@ -3,7 +3,7 @@ project(Scanner)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS "-Wall -Werror -ggdb")
+set(CMAKE_CXX_FLAGS "-Wall -Werror -O3")
 
 add_library(logger SHARED src/logger.cpp)
 set_target_properties(logger PROPERTIES
